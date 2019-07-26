@@ -43,4 +43,9 @@ public class GlobalExceptionHandlerAdvice {
   public ResponseEntity<?> throwable(Throwable ex) {
     return ResponseResult.fail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getStackTrace());
   }
+
+  @ExceptionHandler(value = {HttpStatusException.class})
+  public ResponseEntity<?> httpStatusException(HttpStatusException httpStatusException) {
+    return ResponseResult.fail(httpStatusException.getHttpStatus(), httpStatusException.getMessage());
+  }
 }

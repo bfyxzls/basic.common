@@ -1,5 +1,6 @@
 package com.lind.basic.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import lombok.Getter;
@@ -18,8 +19,9 @@ public class ResponseResult {
   static final String FAIL_MSG = "服务器异常";
 
   /**
-   * 业务状态码.
+   * 业务状态码，为null时不去序列化.
    */
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private String code;
   /**
    * 消息.
@@ -30,8 +32,9 @@ public class ResponseResult {
    */
   private Instant timestamp;
   /**
-   * 响应的数据.
+   * 响应的数据，为null时不去序列化.
    */
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   private Object data;
 
   /**

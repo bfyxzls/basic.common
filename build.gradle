@@ -36,7 +36,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group = 'com.lind'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2'
 sourceCompatibility = '1.8'
 
 repositories {
