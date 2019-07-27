@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
  **/
 @Getter
 @ToString
-public class ResponseResult {
+public class ResponseResult<T> {
 
   static final String SUCCESSFUL_MSG = "处理成功";
   static final String FAIL_MSG = "服务器异常";
@@ -45,7 +45,7 @@ public class ResponseResult {
    * 响应的数据，为null时不去序列化.
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
-  private Object data;
+  private T data;
 
   /**
    * 错误消息.
@@ -60,7 +60,7 @@ public class ResponseResult {
    * @param message
    * @param data
    */
-  private ResponseResult(Boolean success, String code, String message, Object data, ErrorModel error) {
+  private ResponseResult(Boolean success, String code, String message, T data, ErrorModel error) {
     this.success = success;
     this.code = code;
     this.message = message;
@@ -74,7 +74,7 @@ public class ResponseResult {
    *
    * @return ResponseResult
    */
-  public static ResponseEntity<?> success() {
+  public static ResponseEntity<ResponseResult> success() {
     return success(null, SUCCESSFUL_MSG, null);
   }
 
@@ -84,7 +84,7 @@ public class ResponseResult {
    * @param data
    * @return ResponseResult
    */
-  public static ResponseEntity<?> success(Object data) {
+  public static ResponseEntity<ResponseResult> success(Object data) {
     return success(null, SUCCESSFUL_MSG, data);
   }
 
@@ -93,7 +93,7 @@ public class ResponseResult {
    *
    * @return ResponseResult
    */
-  public static ResponseEntity<?> success(String message) {
+  public static ResponseEntity<ResponseResult> success(String message) {
     return success(null, message, null);
   }
 
@@ -102,7 +102,7 @@ public class ResponseResult {
    *
    * @return ResponseResult
    */
-  public static ResponseEntity<?> success(String code, String message, Object data) {
+  public static ResponseEntity<ResponseResult> success(String code, String message, Object data) {
     return ResponseEntity.status(HttpStatus.OK)
         .body(new ResponseResult(true, code, message, data, null));
   }
@@ -113,7 +113,7 @@ public class ResponseResult {
    * @param data
    * @return ResponseResult
    */
-  public static ResponseEntity<?> fail(HttpStatus httpStatus, String message, Object data) {
+  public static ResponseEntity<ResponseResult> fail(HttpStatus httpStatus, String message, Object data) {
     ErrorModel errorModel = null;
     if (data != null) {
       errorModel = ErrorModel.builder()
