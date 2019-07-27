@@ -1,7 +1,7 @@
 package com.lind.basic.common.exception;
 
 /**
- * 代码层异常提供者.
+ * 业务层手动抛出异常的提供者.
  */
 public class ExceptionUtils {
 

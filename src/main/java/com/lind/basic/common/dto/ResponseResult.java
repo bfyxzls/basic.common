@@ -1,8 +1,10 @@
 package com.lind.basic.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
@@ -19,18 +21,26 @@ public class ResponseResult {
   static final String FAIL_MSG = "服务器异常";
 
   /**
+   * 是否成功.
+   */
+  private Boolean success;
+
+  /**
    * 业务状态码，为null时不去序列化.
    */
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private String code;
+
   /**
    * 消息.
    */
   private String message;
+
   /**
    * 时间戳.
    */
   private Instant timestamp;
+
   /**
    * 响应的数据，为null时不去序列化.
    */
@@ -38,17 +48,25 @@ public class ResponseResult {
   private Object data;
 
   /**
+   * 错误消息.
+   */
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private ErrorModel error;
+
+  /**
    * 内部使用，用于构造成功的结果.
    *
    * @param code
-   * @param mesg
+   * @param message
    * @param data
    */
-  private ResponseResult(String code, String mesg, Object data) {
+  private ResponseResult(Boolean success, String code, String message, Object data, ErrorModel error) {
+    this.success = success;
     this.code = code;
-    this.message = mesg;
+    this.message = message;
     this.data = data;
     this.timestamp = ZonedDateTime.now().toInstant();
+    this.error = error;
   }
 
   /**
@@ -86,44 +104,7 @@ public class ResponseResult {
    */
   public static ResponseEntity<?> success(String code, String message, Object data) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(new ResponseResult(code, message, data));
-  }
-
-  /**
-   * 系统异常类没有返回数据.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> fail() {
-    return fail(HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  /**
-   * 系统异常类没有返回数据.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> fail(HttpStatus httpStatus) {
-    return fail(httpStatus, null);
-  }
-
-  /**
-   * 系统异常类并返回结果数据.
-   *
-   * @param data
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> fail(HttpStatus httpStatus, Object data) {
-    return fail(httpStatus, FAIL_MSG, data);
-  }
-
-  /**
-   * 系统异常类并返回结果数据.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> fail(HttpStatus httpStatus, String message) {
-    return fail(httpStatus, message, null);
+        .body(new ResponseResult(true, code, message, data, null));
   }
 
   /**
@@ -133,35 +114,24 @@ public class ResponseResult {
    * @return ResponseResult
    */
   public static ResponseEntity<?> fail(HttpStatus httpStatus, String message, Object data) {
+    ErrorModel errorModel = null;
+    if (data != null) {
+      errorModel = ErrorModel.builder()
+          .httpStatusCode(httpStatus.value())
+          .message(message)
+          .stack(data)
+          .build();
+    }
     return ResponseEntity.status(httpStatus)
-        .body(new ResponseResult(null, message, data));
+        .body(new ResponseResult(false, null, message, null, errorModel));
   }
 
-
-  /**
-   * 参数错误.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> failBadParameter(String message) {
-    return fail(HttpStatus.BAD_REQUEST, message, null);
-  }
-
-  /**
-   * 没有授权.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> failUnauthorized(String message) {
-    return fail(HttpStatus.UNAUTHORIZED, message, null);
-  }
-
-  /**
-   * 没有访问的权限.
-   *
-   * @return ResponseResult
-   */
-  public static ResponseEntity<?> failForbidden(String message) {
-    return fail(HttpStatus.FORBIDDEN, message, null);
+  @Getter
+  @ToString
+  @Builder(toBuilder = true)
+  static class ErrorModel implements Serializable {
+    private Integer httpStatusCode;
+    private String message;
+    private Object stack;
   }
 }
