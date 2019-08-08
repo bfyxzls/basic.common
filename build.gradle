@@ -56,8 +56,13 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'com.google.collections:google-collections:1.0-rc2'
+    compile('org.springframework.boot:spring-boot-starter-web',
+            'com.google.collections:google-collections:1.0-rc2',//集合扩展类库
+            'com.alibaba:fastjson:1.2.35',//json序列化
+            'com.google.guava:guava:24.1-jre',//guava扩展方法类库
+            'org.apache.commons:commons-lang3:3.5',
+    )
+
     compileOnly('org.projectlombok:lombok')
     testCompileOnly('org.projectlombok:lombok')
     testCompile 'org.springframework.boot:spring-boot-starter-test'
