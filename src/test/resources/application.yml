@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${mysql.host:localhost}:3306/basic_common?useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true

@@ -56,16 +56,19 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web',
+    compile(
+            'org.springframework.boot:spring-boot-starter-web',
             'com.google.collections:google-collections:1.0-rc2',//集合扩展类库
             'com.alibaba:fastjson:1.2.35',//json序列化
             'com.google.guava:guava:24.1-jre',//guava扩展方法类库
             'org.apache.commons:commons-lang3:3.5',
     )
-
+    runtime 'mysql:mysql-connector-java:5.1.44'
     compileOnly('org.projectlombok:lombok')
     testCompileOnly('org.projectlombok:lombok')
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile(
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.springframework.boot:spring-boot-starter-data-jpa')
 }
 
 bootJar.enabled = false // 不要求启动项目，不需要main方法

@@ -1,8 +1,8 @@
 package com.lind.basic.common;
 
 import com.lind.basic.common.dto.CreateUserDto;
-import com.lind.basic.common.entity.UserInfo;
-import com.lind.basic.common.entity.UserInfoExtension;
+import com.lind.basic.common.ddd.entity.UserInfo;
+import com.lind.basic.common.ddd.entity.UserBusinessInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,11 +33,11 @@ public class DtoMapperTest {
 
   @Test
   public void equalsAndHashCodeFalseTest() {
-    UserInfoExtension userInfo1 = new UserInfoExtension();
+    UserBusinessInfo userInfo1 = new UserBusinessInfo();
     userInfo1.setId(1L);
     userInfo1.setUsername("lind");
 
-    UserInfoExtension userInfo2 = new UserInfoExtension();
+    UserBusinessInfo userInfo2 = new UserBusinessInfo();
     userInfo2.setId(2L);
     userInfo2.setUsername("lind");
 

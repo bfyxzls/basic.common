@@ -3,7 +3,7 @@ package com.lind.basic.common.exception;
 /**
  * 业务层手动抛出异常的提供者.
  */
-public class ExceptionUtils {
+public class ExceptionThrows {
 
   /**
    * 客户端参数错误，请求400.
