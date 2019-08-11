@@ -1,5 +1,6 @@
 package com.lind.basic.common.ddd.entity;
 
+import com.lind.basic.common.ddd.event.RegisterUserEvent;
 import com.lind.basic.common.ddd.valueObject.Address;
 import com.lind.basic.common.exception.ExceptionThrows;
 import javax.persistence.Embedded;
@@ -10,6 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * 领域实体-用户主体信息.
@@ -23,8 +26,17 @@ import org.apache.commons.lang3.StringUtils;
 public class UserInfo extends BaseEntity {
   private String username;
   private String email;
+
+  /**
+   * 值对象-地址.
+   */
   @Embedded
   private Address address;
+
+  /**
+   * 实体-用户业务行业.
+   */
+  private UserBusinessInfo userBusinessInfo;
 
   /**
    * 领域方法-校验.
@@ -41,5 +53,31 @@ public class UserInfo extends BaseEntity {
     if (StringUtils.isBlank(getAddress().getCity_name())) {
       throw ExceptionThrows.paramError("city is not empty");
     }
+  }
+
+  @Autowired
+  ApplicationEventPublisher applicationEventPublisher;
+
+  /**
+   * 领域方法-获取完整的地址信息.
+   *
+   * @return
+   */
+  public String fullAddress() {
+    return StringUtils.join(
+        getAddress().getProvince_name(),
+        getAddress().getCity_name(),
+        getAddress().getDistrict_name());
+  }
+
+  /**
+   * 领域方法-调用领域事件.
+   */
+  public void registerUser() {
+    applicationEventPublisher.publishEvent(RegisterUserEvent
+        .builder()
+        .msg("注册用户")
+        .userId(getId())
+        .build());
   }
 }

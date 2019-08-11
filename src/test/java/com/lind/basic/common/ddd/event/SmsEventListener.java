@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsEventListener {
   @EventListener
-  public void handleOrderEvent(OrderEvent event) {
+  public void handleOrderEvent(RegisterUserEvent event) {
     System.out.println("短信的事件:" + event.getMsg());
   }
 }
