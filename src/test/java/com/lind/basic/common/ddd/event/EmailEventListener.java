@@ -8,13 +8,26 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EmailEventListener {
+
+  /**
+   * Handle an application event.
+   *
+   * @param event the event to respond to .
+   */
   @EventListener
-  public void handleRegisterUserEvent(RegisterUserEvent event) {
-    System.out.println("电子邮件的事件:" + event.getMsg());
+  public void onApplicationEventDelUserEvent(DelUserEvent event) {
+    System.out.println("电子邮件的事件del:" + event.getMsg());
+
   }
 
+  /**
+   * Handle an application event.
+   *
+   * @param event the event to respond to .
+   */
   @EventListener
-  public void handleDelUserEvent(DelUserEvent event) {
-    System.out.println("电子邮件的事件:" + event.getMsg());
+  public void onApplicationEventRegisterUserEvent(RegisterUserEvent event) {
+    System.out.println("电子邮件的事件register:" + event.getMsg());
+
   }
 }

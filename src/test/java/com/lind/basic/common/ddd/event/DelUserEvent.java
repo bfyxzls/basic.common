@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @Getter
 public class DelUserEvent {
-  private Integer userId;
+  private Long userId;
   private String msg;
 }

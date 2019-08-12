@@ -1,5 +1,6 @@
 package com.lind.basic.common.ddd.entity;
 
+import com.lind.basic.common.ddd.event.DelUserEvent;
 import com.lind.basic.common.ddd.event.RegisterUserEvent;
 import com.lind.basic.common.ddd.valueObject.Address;
 import com.lind.basic.common.exception.ExceptionThrows;
@@ -11,7 +12,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
 /**
@@ -55,9 +55,6 @@ public class UserInfo extends BaseEntity {
     }
   }
 
-  @Autowired
-  ApplicationEventPublisher applicationEventPublisher;
-
   /**
    * 领域方法-获取完整的地址信息.
    *
@@ -73,11 +70,23 @@ public class UserInfo extends BaseEntity {
   /**
    * 领域方法-调用领域事件.
    */
-  public void registerUser() {
+  public void registerUserEvent(ApplicationEventPublisher applicationEventPublisher) {
     applicationEventPublisher.publishEvent(RegisterUserEvent
         .builder()
         .msg("注册用户")
         .userId(getId())
         .build());
   }
+
+  /**
+   * 领域方法-调用领域事件.
+   */
+  public void delUserEvent(ApplicationEventPublisher applicationEventPublisher) {
+    applicationEventPublisher.publishEvent(DelUserEvent
+        .builder()
+        .msg("删除用户")
+        .userId(getId())
+        .build());
+  }
+
 }
