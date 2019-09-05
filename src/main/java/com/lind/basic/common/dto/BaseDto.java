@@ -1,13 +1,11 @@
 package com.lind.basic.common.dto;
 
 import java.util.function.Consumer;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
 /**
  * 数据传递对象基本类.
  */
-@Slf4j
 public abstract class BaseDto {
   /**
    * 将dto类型转换为一个entity类型.
@@ -21,7 +19,7 @@ public abstract class BaseDto {
       p = clazz.newInstance();
     } catch (InstantiationException | IllegalAccessException e) {
       if (logger == null) {
-        log.error("Param NewInstance Error");
+        logger.accept("Param NewInstance Error");
       } else {
         logger.accept("Param NewInstance Error");
       }

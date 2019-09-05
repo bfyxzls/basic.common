@@ -1,6 +1,5 @@
 package com.lind.basic.common.exception;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * 状态码异常，由业务层显示抛出.
  */
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class HttpStatusException extends RuntimeException {
 
   /**

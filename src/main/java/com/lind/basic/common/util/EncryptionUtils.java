@@ -6,6 +6,10 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 public class EncryptionUtils {
+  private EncryptionUtils() {
+    throw new AssertionError();
+  }
+
   /**
    * BASE64解密.
    *

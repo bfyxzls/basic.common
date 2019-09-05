@@ -1,9 +1,11 @@
 package com.lind.basic.common.util;
 
 /**
- * 雪花算法.
+ * 雪花算法-枚举单例模式.
  */
-public class SnowflakeIdWorkerUtils {
+public enum SnowflakeIdWorkerUtils {
+
+  INSTANCE;
 
   /**
    * 开始时间截 (2015-01-01).

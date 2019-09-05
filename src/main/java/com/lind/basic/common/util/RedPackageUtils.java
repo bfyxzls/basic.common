@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RedPackageUtils {
+  private RedPackageUtils() {
+    throw new AssertionError();
+  }
+
   /**
    * 分发红包思路.
    *

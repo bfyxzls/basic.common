@@ -22,6 +22,10 @@ import org.apache.commons.lang3.StringUtils;
  * 公用类库.
  */
 public class CommonUtils {
+  //类不能被实例化
+  private CommonUtils() {
+    throw new AssertionError();
+  }
 
   /**
    * md5 加密.
