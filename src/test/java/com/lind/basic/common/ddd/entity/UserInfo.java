@@ -16,6 +16,10 @@ import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * 领域实体-用户主体信息.
+ * @author zhangzhanling
+ * @version 1.0
+ * @see #prePersist()
+ * @see  #preUpdate()
  */
 @Entity
 @Data
