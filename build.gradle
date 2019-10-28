@@ -28,7 +28,14 @@ buildscript {
         springCloudVersion = 'Finchley.SR1'
     }
 }
-
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+apply plugin: 'idea'
+dependencies {
+    compile(project(":basic-redis"))
+    compile(project(":basic-mongodb"))
+}
 //所有项目的task
 allprojects {
     group = "com.lind"
@@ -65,8 +72,7 @@ allprojects {
                 'com.google.guava:guava:24.1-jre',//guava扩展方法类库
                 'org.apache.commons:commons-lang3:3.5',
         )
-        compile(project(":basic-redis"))
-        compile(project(":basic-mongodb"))
+
 
         runtime 'mysql:mysql-connector-java:5.1.44'
         compileOnly('org.projectlombok:lombok')
@@ -126,6 +132,7 @@ publishing {
  *     from BUILD-SNAPSHOT => <TOPIC>-SNAPSHOT
  *     e.g. 3.2.1.BUILD-SNAPSHOT => 3.2.1.SPR-1234-SNAPSHOT
  */
+
 def qualifyVersionIfNecessary(version) {
     if (rootProject.hasProperty("BRANCH_NAME")) {
         def qualifier = rootProject.getProperty("BRANCH_NAME")
