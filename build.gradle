@@ -29,47 +29,57 @@ buildscript {
     }
 }
 
+//所有项目的task
+allprojects {
+    group = "com.lind"
+    version = qualifyVersionIfNecessary(version)
 
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'java'
-apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'idea'
 
-group = 'com.lind'
-version = '0.0.3'
-sourceCompatibility = '1.8'
+    sourceCompatibility = '1.8'
 
-repositories {
-    mavenLocal()
-    maven {
-        name "aliyun1"
-        url 'http://maven.aliyun.com/nexus/content/groups/public'
+    repositories {
+        mavenLocal()
+        maven {
+            name "aliyun1"
+            url 'http://maven.aliyun.com/nexus/content/groups/public'
+        }
+        maven {
+            name "aliyun2"
+            url 'http://maven.aliyun.com/mvn/repository/'
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
     }
-    maven {
-        name "aliyun2"
-        url 'http://maven.aliyun.com/mvn/repository/'
+
+    dependencies {
+        compile(
+                'org.springframework.boot:spring-boot-starter-web',
+                'com.google.collections:google-collections:1.0-rc2',//集合扩展类库
+                'com.alibaba:fastjson:1.2.35',//json序列化
+                'com.google.guava:guava:24.1-jre',//guava扩展方法类库
+                'org.apache.commons:commons-lang3:3.5',
+        )
+        compile(project(":basic-redis"))
+        compile(project(":basic-mongodb"))
+
+        runtime 'mysql:mysql-connector-java:5.1.44'
+        compileOnly('org.projectlombok:lombok')
+        testCompileOnly('org.projectlombok:lombok')
+        testCompile(
+                'org.springframework.boot:spring-boot-starter-test',
+                'org.springframework.boot:spring-boot-starter-data-jpa')
     }
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
-    mavenCentral()
+
 }
 
-dependencies {
-    compile(
-            'org.springframework.boot:spring-boot-starter-web',
-            'com.google.collections:google-collections:1.0-rc2',//集合扩展类库
-            'com.alibaba:fastjson:1.2.35',//json序列化
-            'com.google.guava:guava:24.1-jre',//guava扩展方法类库
-            'org.apache.commons:commons-lang3:3.5',
-    )
-    runtime 'mysql:mysql-connector-java:5.1.44'
-    compileOnly('org.projectlombok:lombok')
-    testCompileOnly('org.projectlombok:lombok')
-    testCompile(
-            'org.springframework.boot:spring-boot-starter-test',
-            'org.springframework.boot:spring-boot-starter-data-jpa')
-}
+//子任务task
+subprojects {}
 
 bootJar.enabled = false // 不要求启动项目，不需要main方法
 jar.enabled = true // 需要在build/libs下生成jar文件
@@ -107,4 +117,21 @@ publishing {
             }
         }
     }
+}
+
+/*
+ * Support publication of artifacts versioned by topic branch.
+ * CI builds supply `-P BRANCH_NAME=<TOPIC>` to gradle at build time.
+ * If <TOPIC> starts with 'SPR-', change version
+ *     from BUILD-SNAPSHOT => <TOPIC>-SNAPSHOT
+ *     e.g. 3.2.1.BUILD-SNAPSHOT => 3.2.1.SPR-1234-SNAPSHOT
+ */
+def qualifyVersionIfNecessary(version) {
+    if (rootProject.hasProperty("BRANCH_NAME")) {
+        def qualifier = rootProject.getProperty("BRANCH_NAME")
+        if (qualifier.startsWith("SPR-")) {
+            return version.replace("BUILD", qualifier)
+        }
+    }
+    return version
 }

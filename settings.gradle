@@ -1,1 +1,8 @@
-rootProject.name = 'basic.common'
+rootProject.name = 'basic'
+include 'basic-redis'
+
+rootProject.children.each {project ->
+    project.buildFileName = "${project.name}.gradle"
+}
+include 'basic-mongodb'
+
