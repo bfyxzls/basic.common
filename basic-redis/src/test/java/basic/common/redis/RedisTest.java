@@ -1,6 +1,5 @@
-package com.lind.basic.common.subproject;
+package basic.common.redis;
 
-import basic.common.redis.RedisEntity;
 import org.junit.Assert;
 import org.junit.Test;
 
